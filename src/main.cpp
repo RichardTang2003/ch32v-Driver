@@ -20,17 +20,23 @@ extern "C" void EXTI3_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-f
 /* Global define */
 
 /* Global Variable */
-uint8_t states = 0;
-static LED led1{GPIOA, GPIO_Pin_15, RCC_APB2Periph_GPIOA};
-static LED led2{GPIOB, GPIO_Pin_4, RCC_APB2Periph_GPIOB};
-static LED led3{GPIOC, GPIO_Pin_0, RCC_APB2Periph_GPIOC};
-static LED led4{GPIOC, GPIO_Pin_1, RCC_APB2Periph_GPIOC};
+static uint8_t states = 1;
+static GPIO a15{GPIOA, GPIO_Pin_15, RCC_APB2Periph_GPIOA, GPIO_Mode_Out_PP};
+static GPIO a4{GPIOB, GPIO_Pin_4, RCC_APB2Periph_GPIOB, GPIO_Mode_Out_PP};
+static GPIO c0{GPIOC, GPIO_Pin_0, RCC_APB2Periph_GPIOC, GPIO_Mode_Out_OD};
+static GPIO c1{GPIOC, GPIO_Pin_1, RCC_APB2Periph_GPIOC, GPIO_Mode_Out_OD};
+
+static LED led1{a15};
+static LED led2{a4};
+static LED led3{c0};
+static LED led4{c1};
+
 static void ledOffHelper()
 {
     led1.off();
     led2.off();
-    led3.on();
-    led4.on();
+    led3.off();
+    led4.off();
 }
 
 static USART pcSerial{USART2};
@@ -92,8 +98,8 @@ int main(void)
                 ledOffHelper();
                 led1.on();
                 led2.on();
-                led3.off();
-                led4.off();
+                led3.on();
+                led4.on();
                 pcSerial.sendStr("Mode1.");
                 Delay_Ms(2000);
                 break;
@@ -101,16 +107,16 @@ int main(void)
                 ledOffHelper();
                 led1.blink(500);
                 led2.blink(500);
-                led3.rBlink(500);
-                led4.rBlink(500);
+                led3.blink(500);
+                led4.blink(500);
                 pcSerial.sendStr("Mode2.");
                 break;
             case 2:
                 ledOffHelper();
                 led1.on();
                 led2.on();
-                led3.on();
-                led4.on();
+                led3.off();
+                led4.off();
                 pcSerial.sendStr("Mode3.");
                 Delay_Ms(2000);
                 break;
@@ -123,13 +129,5 @@ void HardFault_Handler(void)
 {
     while (1)
     {
-    }
-}
-void EXTI3_IRQHandler(void)
-{
-    if(EXTI_GetITStatus(EXTI_Line3) == SET)
-    {
-        states = (states + 1) % 3; 
-        EXTI_ClearITPendingBit(EXTI_Line3);
     }
 }
