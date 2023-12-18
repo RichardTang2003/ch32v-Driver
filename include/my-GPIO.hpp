@@ -8,6 +8,7 @@
 #include <ch32v30x.h>
 #endif
 #include <debug.h>
+#include <cassert>
 
 namespace myCH32v
 {
@@ -59,6 +60,11 @@ namespace myCH32v
             return m_mode;
         }
 
+        [[nodiscard]] GPIO_Usage getUsage() const
+        {
+            return m_usage;
+        }
+
         void setState(bool state)
         {
             if (m_mode == GPIO_Mode_Out_OD || m_mode == GPIO_Mode_Out_PP || m_mode == GPIO_Mode_AF_OD || m_mode == GPIO_Mode_AF_PP)
@@ -94,6 +100,7 @@ namespace myCH32v
         LED(GPIO &GPIO_obj)
             : m_GPIO_p(&GPIO_obj)
         {
+            assert(m_GPIO_p->getUsage() == notUsed);
             switch (m_GPIO_p->getMode())
             {
                 case GPIO_Mode_Out_OD:

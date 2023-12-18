@@ -22,12 +22,12 @@ extern "C" void EXTI3_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-f
 /* Global Variable */
 static uint8_t states = 1;
 static GPIO a15{GPIOA, GPIO_Pin_15, RCC_APB2Periph_GPIOA, GPIO_Mode_Out_PP};
-static GPIO a4{GPIOB, GPIO_Pin_4, RCC_APB2Periph_GPIOB, GPIO_Mode_Out_PP};
+static GPIO b4{GPIOB, GPIO_Pin_4, RCC_APB2Periph_GPIOB, GPIO_Mode_Out_PP};
 static GPIO c0{GPIOC, GPIO_Pin_0, RCC_APB2Periph_GPIOC, GPIO_Mode_Out_OD};
 static GPIO c1{GPIOC, GPIO_Pin_1, RCC_APB2Periph_GPIOC, GPIO_Mode_Out_OD};
 
 static LED led1{a15};
-static LED led2{a4};
+static LED led2{b4};
 static LED led3{c0};
 static LED led4{c1};
 
